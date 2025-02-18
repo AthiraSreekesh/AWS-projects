@@ -1,4 +1,4 @@
-# Security group creation
+# This file contains the Terraform configuration for creating a security group in AWS.
 
 resource "aws_security_group" "lamp_sgs" {
 
@@ -24,6 +24,11 @@ resource "aws_security_group" "lamp_sgs" {
 }
 
 
+# This file contains the main configuration for the AWS projects.
+# 
+# SG inbound rule for bastion server:
+# This section defines the security group inbound rules for the bastion server.
+# It specifies the allowed inbound traffic to the bastion host, ensuring secure access.
 # SG inbound rule for bastion server
 
 resource "aws_security_group_rule" "ssh_bastion_sg_rule_dev" {
@@ -105,3 +110,22 @@ resource "aws_security_group_rule" "db_server_sg_inbound_rule" {
 # Outputs:
 # - instance_id: The ID of the created instance.
 # - public_ip: The public IP address assigned to the instance.
+
+resource "aws_instance" "lamp_instances" {
+  for_each = toset(var.names)
+
+  ami                         = var.web_instance_ami
+  instance_type               = var.web_instance_type
+  key_name                    = aws_key_pair.ssh_key.key_name
+  vpc_security_group_ids      = [aws_security_group.lamp_sgs["${each.key}"].id]
+  user_data                   = file("${each.key}.sh")
+  user_data_replace_on_change = var.user_data_replacement
+  
+  lifecycle {
+    create_before_destroy = true
+  }
+  tags = {
+    "Name" = "${var.project_name}-${var.environment}-${each.key}"
+  }
+}
+

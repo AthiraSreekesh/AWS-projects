@@ -1,7 +1,10 @@
-region             = "ap-south-1"
-project_name       = "LAMP"
-environment        = "Development"
-owner              = "Athira"
-names              = ["bastion", "webserver", "db"]
-webserver_sg_ports = ["80", "443"]
-db_sg_ports        = ["3306"] 
+region                = "ap-south-1"
+project_name          = "LAMP"
+environment           = "Development"
+owner                 = "Athira"
+names                 = ["bastion", "webserver", "db"]
+webserver_sg_ports    = ["80", "443"]
+db_sg_ports           = ["3306"]
+web_instance_type     = "t2.micro"
+web_instance_ami      = "ami-04a37924ffe27da53"
+user_data_replacement = true
