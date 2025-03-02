@@ -8,3 +8,7 @@ db_sg_ports           = ["3306"]
 web_instance_type     = "t2.micro"
 web_instance_ami      = "ami-04a37924ffe27da53"
 user_data_replacement = true
+cidr_block            = "172.16.0.0/16"
+public_subnets        = "3"
+private_subnets       = "3"
+new_bits              = "3"
