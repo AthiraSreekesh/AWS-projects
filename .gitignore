@@ -1,4 +1,4 @@
 .terraform.lock.hcl
 .terraform/
-./modules/keypair/ssh-key.pem
-./modules/keypair/ssh-key.pub
+modules/keypair/ssh-key.pem
+modules/keypair/ssh-key.pub
