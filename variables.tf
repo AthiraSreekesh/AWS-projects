@@ -38,13 +38,26 @@ variable "web_instance_type" {
   type        = string
 }
 
-
-variable "web_instance_ami" {
-  description = "web instance ami"
-  type        = string
-}
-
 variable "user_data_replacement" {
   description = "boolian to set user data replacement status"
   type        = bool
+}
+
+variable "cidr_block" {
+  description = "cidr block of VPC"
+  type        = string
+}
+
+variable "public_subnets" {
+  description = "number of public subnets"
+  type        = string
+}
+
+variable "private_subnets" {
+  description = "number of private subnets"
+  type        = string
+}
+variable "new_bits" {
+  description = "new bits to be added for subnetting"
+  type        = string
 }

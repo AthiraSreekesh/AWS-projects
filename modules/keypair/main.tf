@@ -19,9 +19,10 @@ resource "local_file" "ssh_public_key" {
 # Creating the key pair in aws using the SSH key created
 
 resource "aws_key_pair" "ssh_key" {
-  key_name_prefix = var.project_name
+  
+  key_name_prefix = "${var.project_name}-${var.environment}-"
   public_key      = local_file.ssh_public_key.content
   tags = {
-    "Name" = var.project_name
+    "Name" = "${var.project_name}-${var.environment}"
   }
 }
