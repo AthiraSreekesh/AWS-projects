@@ -2,6 +2,9 @@ output "vpc_id" {
   value = module.vpc.vpc_id
 }
 
+output "keypair_id" {
+  value = module.aws_key_pair.key_id
+}
 output "public_subnet1" {
   value = module.vpc.subnets.public_subnets[0]
 }

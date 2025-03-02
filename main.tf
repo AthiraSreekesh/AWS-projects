@@ -9,4 +9,11 @@ module "vpc" {
   new_bits        = var.new_bits
 }
 
-# Keypair Creation
+# Keypair creation
+
+module "aws_key_pair" {
+  source       = "./modules/keypair"
+  project_name = var.project_name
+  environment  = var.environment
+}
+
