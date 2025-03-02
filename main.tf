@@ -113,3 +113,67 @@ resource "aws_security_group_rule" "db_server_sg_inbound_rule" {
   source_security_group_id = aws_security_group.lamp_sgs["webserver"].id
   security_group_id        = aws_security_group.lamp_sgs["db"].id
 }
+
+# This Terraform configuration defines an AWS EC2 instance resource.
+# # Arguments:
+# - ami: The ID of the AMI to use for the instance.
+# - instance_type: The type of instance to start.
+# - key_name: The key name to use for the instance.
+# - subnet_id: The VPC subnet ID to launch the instance in.
+# - tags: A map of tags to assign to the resource.
+# 
+# Outputs:
+# - instance_id: The ID of the created instance.
+# - public_ip: The public IP address assigned to the instance.
+
+
+resource "aws_instance" "bastion_instance" {
+  
+  ami                         = data.aws_ami.ami.id
+  instance_type               = var.web_instance_type
+  key_name                    = module.aws_key_pair.key_name
+  vpc_security_group_ids      = [aws_security_group.lamp_sgs["bastion"].id]
+  user_data                   = file("bastion.sh")
+  user_data_replace_on_change = var.user_data_replacement
+  subnet_id = module.vpc.subnets.public_subnets[0]
+  lifecycle {
+    create_before_destroy = true
+  }
+  tags = {
+    "Name" = "${var.project_name}-${var.environment}-bastion"
+  }
+}
+
+resource "aws_instance" "web_instance" {
+  
+  ami                         = data.aws_ami.ami.id
+  instance_type               = var.web_instance_type
+  key_name                    = module.aws_key_pair.key_name
+  vpc_security_group_ids      = [aws_security_group.lamp_sgs["webserver"].id]
+  user_data                   = file("webserver.sh")
+  user_data_replace_on_change = var.user_data_replacement
+  subnet_id = module.vpc.subnets.public_subnets[1]
+  lifecycle {
+    create_before_destroy = true
+  }
+  tags = {
+    "Name" = "${var.project_name}-${var.environment}-webserver"
+  }
+}
+
+resource "aws_instance" "db_instance" {
+  
+  ami                         = data.aws_ami.ami.id
+  instance_type               = var.web_instance_type
+  key_name                    = module.aws_key_pair.key_name
+  vpc_security_group_ids      = [aws_security_group.lamp_sgs["db"].id]
+  user_data                   = file("db.sh")
+  user_data_replace_on_change = var.user_data_replacement
+  subnet_id = module.vpc.subnets.private_subnets[0]
+  lifecycle {
+    create_before_destroy = true
+  }
+  tags = {
+    "Name" = "${var.project_name}-${var.environment}-db"
+  }
+}

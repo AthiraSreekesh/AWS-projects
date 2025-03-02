@@ -38,12 +38,6 @@ variable "web_instance_type" {
   type        = string
 }
 
-
-variable "web_instance_ami" {
-  description = "web instance ami"
-  type        = string
-}
-
 variable "user_data_replacement" {
   description = "boolian to set user data replacement status"
   type        = bool
